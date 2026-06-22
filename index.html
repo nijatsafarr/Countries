@@ -14,15 +14,9 @@
     <div class="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 
     <script>
-        let baseurl = "https://thingproxy.freeboard.io/fetch/https://restcountries.com/v3.1/";
-        const container = document.querySelector(".container");
         async function getData() {
-    const response = await fetch(`${baseurl}all?fields=name,flags,capital,currencies,population,borders,cca3`);
-    let result = await response.json();
-    
-    // corsproxy.io birbaşa array qaytarır
-    let data = Array.isArray(result) ? result : result.data || Object.values(result);
-    
+    const response = await fetch(`https://restcountries.com/v3.1/all?fields=name,flags,capital,currencies,population,borders,cca3`);
+    let data = await response.json();
     render(data);
 }
         function render(data) {
