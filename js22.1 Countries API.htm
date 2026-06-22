@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries</title>
+    <link rel="shortcut icon" href="https://cdn-icons-png.flaticon.com/128/9747/9747001.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-green-400">
+
+    <div class="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
+
+    <script>
+        let baseurl = "https://restcountries.com/v3.1/";
+        const container = document.querySelector(".container");
+        async function getData() {
+            const response = await fetch(`${baseurl}all?fields=name,flags,capital,currencies,population,borders,cca3`);
+            let data = await response.json();
+            render(data);
+        }
+        function render(data) {
+            container.innerHTML = "";
+            console.log(data[0])
+
+            data
+                .filter((item) => item.cca3 !== "ARM")
+                .forEach(country => {
+
+                    container.innerHTML += `
+            <div onclick="goDetail('${country.cca3}')"  class="max-w-sm rounded-2xl shadow-md p-4 bg-white hover:shadow-lg transition cursor-pointer">
+                
+                <div class="flex items-center gap-3 mb-4">
+                    <img src="${country.flags?.png}" 
+                         alt="${country.name?.common}" 
+                         class="w-12 h-8 object-cover rounded"/>
+                    <h2 class="text-lg font-semibold">${country.name?.common}</h2>
+                </div>
+
+                <div class="space-y-2 text-sm text-gray-700">
+                    <p><span class="font-medium">Capital:</span> ${country.capital?.[0] || "N/A"}</p>
+
+                    <p><span class="font-medium">Population:</span> ${country.population?.toLocaleString()}</p>
+
+                    <p>
+                        <span class="font-medium">Currencies:</span>
+                        ${country.currencies
+                            ? Object.values(country.currencies).map(c => c.name).join(", ")
+                            : "N/A"
+                        }
+                    </p>
+
+                    <p>
+                        <span class="font-medium"> Borders:</span > 
+                        ${country.borders?.length ? country.borders.map((item) => `<a href="detail.htm?code=${item}" class="text-blue-400 hover:underline">${item}</a>`) : "n/a"}
+                    </p>
+                </div>
+
+            </div>`;
+                });
+        }
+
+        getData();
+
+
+        function goDetail(code) { window.location.href = `detail.htm?code=${code}`; }
+    </script>
+
+</body>
+
+</html>
