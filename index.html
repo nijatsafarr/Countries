@@ -14,16 +14,13 @@
     <div class="container mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></div>
 
     <script>
-       async function getData() {
-    const response = await fetch(`https://restcountries.com/v3.1/all?fields=name,flags,capital,currencies,population,borders,cca3`, {
-        headers: {
-            'Accept': 'application/json'
-        },
-        mode: 'cors'
-    });
-    let data = await response.json();
-    render(data);
-}
+        let baseurl = "https://restcountries.com/v3.1/";
+        const container = document.querySelector(".container");
+        async function getData() {
+            const response = await fetch(`${baseurl}all?fields=name,flags,capital,currencies,population,borders,cca3`);
+            let data = await response.json();
+            render(data);
+        }
         function render(data) {
             container.innerHTML = "";
             console.log(data[0])
